@@ -19,5 +19,8 @@ Then, run the script with the path to your CSV file:
 python scripts/load-messages.py <path-to-csv-file>
 ```
 
+## Known Issues
+The application is not yet interesting enough to have notable known issues.
+
 ## Important Documentation
 - https://docs.spring.io/spring-boot/appendix/application-properties/index.html

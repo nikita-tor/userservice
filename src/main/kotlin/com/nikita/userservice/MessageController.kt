@@ -28,6 +28,8 @@ class MessageController(private val service: MessageService) {
     fun post(@RequestBody message: Message): ResponseEntity<Message> {
         logger.info("Saving message with value: ${message.toString()}")
         val savedMessage = service.save(message)
+        
+        logger.info("Saved message successfully. Message id: ${savedMessage.id}")
         return ResponseEntity.created(URI("/${savedMessage.id}")).body(savedMessage)
     }
 

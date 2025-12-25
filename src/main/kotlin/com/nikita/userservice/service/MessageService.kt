@@ -2,27 +2,22 @@
 package com.nikita.userservice.service
 
 import com.nikita.userservice.model.Message
-import java.util.*
-import org.springframework.jdbc.core.JdbcTemplate
-import org.springframework.jdbc.core.query
+import com.nikita.userservice.repository.MessageRepository
+import java.util.UUID
 import org.springframework.stereotype.Service
 
 @Service
-class MessageService(private val db: JdbcTemplate) {
-    fun findMessages(): List<Message> = db.query("select * from messages") { response, _ ->
-        Message(response.getString("id"), response.getString("text"))
-    }
+class MessageService(private val repository: MessageRepository) {
+    fun findMessages(): List<Message> = repository.findAll().toList()
 
-    fun findMessageById(id: String): Message? = db.query("select * from messages where id = ?", id) { response, _ ->
-        Message(response.getString("id"), response.getString("text"))
-    }.singleOrNull()
+    fun findMessageById(id: String): Message? = repository.findById(id).orElse(null)
 
     fun save(message: Message): Message {
-        val id = message.id ?: UUID.randomUUID().toString() // Generate new id if input is null
-        db.update(
-            "insert into messages values ( ?, ? )",
-            id, message.text
-        )
-        return message.copy(id = id)
+        return if (message.id == null) {
+            val newMessage = message.copy(id = UUID.randomUUID().toString())
+            repository.save(newMessage)
+        } else {
+            repository.save(message)
+        }
     }
 }
