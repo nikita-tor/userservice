@@ -26,7 +26,7 @@ echo "your-openai-api-key" > llm_api_key.txt
 Alternatively, you can configure the path to the key file or the API URL via application properties:
 - `llm.api.key.path`: Path to the file containing the API key (default: `llm_api_key.txt`).
 - `llm.api.url`: URL of the LLM API (default: `https://api.openai.com/v1/chat/completions`).
-- `llm.model`: Model to use (default: `gpt-3.5-turbo`).
+- `llm.model`: Model to use (default: `gpt-4o-mini`).
 
 ## Loading Data (Messages) With Python Script
 To load messages into the service, you can use the `load-messages.py` script.

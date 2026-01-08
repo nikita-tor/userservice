@@ -19,7 +19,7 @@ class LlmService(private val restClient: RestClient) {
     private lateinit var apiUrl: String
 
     // Model to use. Can be overridden.
-    @Value("\${llm.model:gpt-3.5-turbo}")
+    @Value("\${llm.model:gpt-4o-mini}")
     private lateinit var model: String
 
     private var cachedApiKey: String? = null
