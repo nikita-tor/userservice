@@ -15,7 +15,7 @@ class LlmService(private val restClient: RestClient) {
     @Value("\${llm.api.key.path:llm_api_key.txt}")
     private lateinit var apiKeyPath: String
 
-    @Value("\${llm.api.url:https://api.openai.com/v1/chat/completions}")
+    @Value("\${llm.api.url:https://api.openai.com/v1/responses}")
     private lateinit var apiUrl: String
 
     // Model to use. Can be overridden.
@@ -37,10 +37,11 @@ class LlmService(private val restClient: RestClient) {
             return false
         }
 
+        // Using 'input' with a list of messages as per "Simple message inputs are compatible" guidance for migration.
         val request = OpenAiRequest(
             model = model,
-            messages = listOf(
-                OpenAiMessage(role = "user", content = "is the message sentiment happy? Respond with only \"yes\" or \"no\". Message: \"$message\"")
+            input = listOf(
+                OpenAiMessageInput(role = "user", content = "is the message sentiment happy? Respond with only \"yes\" or \"no\". Message: \"$message\"")
             )
         )
 
@@ -53,7 +54,8 @@ class LlmService(private val restClient: RestClient) {
                 .retrieve()
                 .body(OpenAiResponse::class.java)
 
-            val content = response?.choices?.firstOrNull()?.message?.content?.trim()?.lowercase()
+            // Parsing the new response structure: output -> [item] -> content -> [part] -> text
+            val content = response?.output?.firstOrNull()?.content?.firstOrNull()?.text?.trim()?.lowercase()
             return content == "yes"
         } catch (e: Exception) {
             println("Error calling LLM API: ${e.message}")
@@ -80,21 +82,27 @@ class LlmService(private val restClient: RestClient) {
 
 data class OpenAiRequest(
     val model: String,
-    val messages: List<OpenAiMessage>
+    val input: List<OpenAiMessageInput>
 )
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-data class OpenAiMessage(
+data class OpenAiMessageInput(
     val role: String,
     val content: String
 )
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class OpenAiResponse(
-    val choices: List<OpenAiChoice>
+    val output: List<OpenAiResponseOutputItem>
 )
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-data class OpenAiChoice(
-    val message: OpenAiMessage
+data class OpenAiResponseOutputItem(
+    val content: List<OpenAiResponseContentPart>
+)
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+data class OpenAiResponseContentPart(
+    val type: String?,
+    val text: String?
 )
