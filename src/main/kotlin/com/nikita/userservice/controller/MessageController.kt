@@ -1,5 +1,5 @@
 // MessageController.kt
-package com.nikita.userservice
+package com.nikita.userservice.controller
 
 import com.nikita.userservice.model.Message
 import com.nikita.userservice.service.MessageService
