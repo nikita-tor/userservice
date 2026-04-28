@@ -17,7 +17,9 @@ private val logger = KotlinLogging.logger {}
 
 @RestController
 @RequestMapping("/")
-class MessageController(private val service: MessageService) {
+class MessageController(
+    private val service: MessageService,
+) {
     @GetMapping
     fun listMessages(): ResponseEntity<List<Message>> {
         logger.info("Calling list messages endpoint")
@@ -25,17 +27,20 @@ class MessageController(private val service: MessageService) {
     }
 
     @PostMapping
-    fun post(@RequestBody message: Message): ResponseEntity<Message> {
-        logger.info("Saving message with value: ${message.toString()}")
+    fun post(
+        @RequestBody message: Message,
+    ): ResponseEntity<Message> {
+        logger.info("Saving message with value: $message")
         val savedMessage = service.save(message)
-        
+
         logger.info("Saved message successfully. Message id: ${savedMessage.id}")
         return ResponseEntity.created(URI("/${savedMessage.id}")).body(savedMessage)
     }
 
     @GetMapping("/{id}")
-    fun getMessage(@PathVariable id: String): ResponseEntity<Message> =
-        service.findMessageById(id).toResponseEntity()
+    fun getMessage(
+        @PathVariable id: String,
+    ): ResponseEntity<Message> = service.findMessageById(id).toResponseEntity()
 
     private fun Message?.toResponseEntity(): ResponseEntity<Message> =
         // If the message is null (not found), set response code to 404

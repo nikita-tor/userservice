@@ -2,15 +2,17 @@ import requests
 import csv
 import sys
 
-def send_message(text):
+def send_message(text, sentiment=None):
     """Sends a single message to the API."""
     url = "http://localhost:8080"
     headers = {"Content-Type": "application/json"}
     data = {"text": text}
+    if sentiment:
+        data["sentiment"] = sentiment
     try:
         response = requests.post(url, headers=headers, json=data)
         response.raise_for_status()  # Raise an exception for bad status codes
-        print(f"Successfully sent message: {text}")
+        print(f"Successfully sent message: {text} (Sentiment: {sentiment or 'AUTO'})")
         return response.json()
     except requests.exceptions.RequestException as e:
         print(f"Error sending message: {text}. Error: {e}")
@@ -23,7 +25,9 @@ def main(csv_file_path):
             reader = csv.reader(file) # TODO: switch to csv.DictReader in future.
             for row in reader:
                 if row:
-                    send_message(row[0])
+                    text = row[0]
+                    sentiment = row[1] if len(row) > 1 else None
+                    send_message(text, sentiment)
     except FileNotFoundError:
         print(f"Error: The file '{csv_file_path}' was not found.")
     except Exception as e:
