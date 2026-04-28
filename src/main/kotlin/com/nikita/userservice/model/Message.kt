@@ -8,6 +8,7 @@ import jakarta.persistence.Table
 @Table(name = "messages")
 data class Message(
     val text: String,
+    val sentiment: Sentiment? = null,
     @Id
-    val id: String? = null
+    val id: String? = null,
 )
