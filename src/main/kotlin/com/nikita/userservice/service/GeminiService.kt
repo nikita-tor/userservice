@@ -1,7 +1,9 @@
 package com.nikita.userservice.service
 
 import com.nikita.userservice.model.Sentiment
+import com.nikita.userservice.util.GEMINI_CLIENT_NAME
 import mu.KotlinLogging
+import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestClient
@@ -11,7 +13,7 @@ private val logger = KotlinLogging.logger {}
 
 @Service
 class GeminiService(
-    private val restClient: RestClient,
+    @Qualifier(GEMINI_CLIENT_NAME) private val restClient: RestClient,
     @Value("\${gemini.api.key:}") private val apiKey: String,
 ) {
     private val baseUrl =
