@@ -24,7 +24,7 @@ Spring Boot · Kotlin · H2 (file-based) · Google Gemini API · ktlint
 | Goal | Command |
 |------|---------|
 | Run all tests (unit + integration) | `./mvnw test` |
-| Run only unit tests | `./mvnw test -Dtest=com.nikita.userservice.controller.MessageControllerUnitTest,com.nikita.userservice.service.MessageServiceUnitTest` |
+| Run only unit tests | `.\mvnw.cmd test -Dtest="com.nikita.userservice.controller.MessageControllerUnitTest,com.nikita.userservice.service.MessageServiceUnitTest"` |
 | Generate JaCoCo coverage report | `./mvnw test jacoco:report` — then open `target/site/jacoco/index.html` in a browser |
 
 ## API Reference
