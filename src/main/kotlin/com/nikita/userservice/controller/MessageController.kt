@@ -16,7 +16,7 @@ import java.net.URI
 private val logger = KotlinLogging.logger {}
 
 @RestController
-@RequestMapping("/")
+@RequestMapping("/api/v1/messages")
 class MessageController(
     private val service: MessageService,
 ) {
@@ -34,7 +34,7 @@ class MessageController(
         val savedMessage = service.save(message)
 
         logger.info("Saved message successfully. Message id: ${savedMessage.id}")
-        return ResponseEntity.created(URI("/${savedMessage.id}")).body(savedMessage)
+        return ResponseEntity.created(URI("/api/v1/messages/${savedMessage.id}")).body(savedMessage)
     }
 
     @GetMapping("/{id}")

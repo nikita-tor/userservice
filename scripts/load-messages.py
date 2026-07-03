@@ -4,7 +4,7 @@ import sys
 
 def send_message(text, sentiment=None):
     """Sends a single message to the API."""
-    url = "http://localhost:8080"
+    url = "http://localhost:8080/api/v1/messages"
     headers = {"Content-Type": "application/json"}
     data = {"text": text}
     if sentiment:
