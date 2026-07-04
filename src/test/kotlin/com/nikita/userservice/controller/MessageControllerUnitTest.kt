@@ -19,7 +19,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get a
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post as mvcPost
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.content as mockContent
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.header as mockHeader
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers.`status` as mockStatus
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status as mockStatus
 
 @ExtendWith(MockitoExtension::class)
 class MessageControllerUnitTest(

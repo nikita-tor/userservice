@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito.mock
+import org.mockito.Mockito.`when`
 
 class MessageServiceUnitTest {
     private val repository: MessageRepository = mock(MessageRepository::class.java)
@@ -18,8 +19,7 @@ class MessageServiceUnitTest {
     @Test
     fun `should return all messages from repository`() {
         val dummyMessages = listOf(Message("dummy", Sentiment.HAPPY, "dummy-id"))
-        org.mockito.Mockito
-            .`when`(repository.findAll())
+        `when`(repository.findAll())
             .thenReturn(dummyMessages)
 
         val result = service.findMessages()
@@ -30,8 +30,7 @@ class MessageServiceUnitTest {
 
     @Test
     fun `should return empty list when repository is empty`() {
-        org.mockito.Mockito
-            .`when`(repository.findAll())
+        `when`(repository.findAll())
             .thenReturn(emptyList())
 
         val result = service.findMessages()
@@ -42,8 +41,7 @@ class MessageServiceUnitTest {
     @Test
     fun `should return message when found by id`() {
         val message = Message("hello", Sentiment.HAPPY, "msg-1")
-        org.mockito.Mockito
-            .`when`(repository.findById("msg-1"))
+        `when`(repository.findById("msg-1"))
             .thenReturn(java.util.Optional.of(message))
 
         val result = service.findMessageById("msg-1")
@@ -53,8 +51,7 @@ class MessageServiceUnitTest {
 
     @Test
     fun `should return null when not found by id`() {
-        org.mockito.Mockito
-            .`when`(repository.findById("msg-1"))
+        `when`(repository.findById("msg-1"))
             .thenReturn(java.util.Optional.empty())
 
         val result = service.findMessageById("msg-1")
@@ -65,11 +62,9 @@ class MessageServiceUnitTest {
     @Test
     fun `should generate UUID and call Gemini when saving without id`() {
         val message = Message("Hello world", null, null)
-        org.mockito.Mockito
-            .`when`(geminiService.analyzeSentiment(message.text))
+        `when`(geminiService.analyzeSentiment(message.text))
             .thenAnswer { Sentiment.HAPPY }
-        org.mockito.Mockito
-            .`when`(repository.save<Message>(org.mockito.ArgumentMatchers.any(Message::class.java)))
+        `when`(repository.save<Message>(org.mockito.ArgumentMatchers.any(Message::class.java)))
             .thenAnswer { invocation -> invocation.getArgument<Message>(0) }
 
         val result = service.save(message)
@@ -81,11 +76,9 @@ class MessageServiceUnitTest {
     @Test
     fun `should not regenerate id when already present`() {
         val message = Message("Hello world", null, "existing-id")
-        org.mockito.Mockito
-            .`when`(geminiService.analyzeSentiment(message.text))
+        `when`(geminiService.analyzeSentiment(message.text))
             .thenAnswer { Sentiment.UNKNOWN }
-        org.mockito.Mockito
-            .`when`(repository.save<Message>(org.mockito.ArgumentMatchers.any(Message::class.java)))
+        `when`(repository.save<Message>(org.mockito.ArgumentMatchers.any(Message::class.java)))
             .thenAnswer { invocation -> invocation.getArgument<Message>(0) }
 
         val result = service.save(message)
