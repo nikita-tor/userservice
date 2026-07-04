@@ -12,6 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension
 import org.mockito.kotlin.any
 import org.mockito.kotlin.doReturn
 import org.springframework.http.MediaType
+import org.springframework.test.json.JsonCompareMode
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get as mvcGet
@@ -45,7 +46,7 @@ class MessageControllerUnitTest(
         mockMvc
             .perform(mvcGet("/api/v1/messages").accept(MediaType.APPLICATION_JSON))
             .andExpect(mockStatus().isOk)
-            .andExpect(mockContent().json(objectMapper.writeValueAsString(listOf(DUMMY_MESSAGE)), true))
+            .andExpect(mockContent().json(objectMapper.writeValueAsString(listOf(DUMMY_MESSAGE)), JsonCompareMode.STRICT))
     }
 
     @Test
@@ -55,7 +56,7 @@ class MessageControllerUnitTest(
         mockMvc
             .perform(mvcGet("/api/v1/messages").accept(MediaType.APPLICATION_JSON))
             .andExpect(mockStatus().isOk)
-            .andExpect(mockContent().json("[]", true))
+            .andExpect(mockContent().json("[]", JsonCompareMode.STRICT))
     }
 
     @Test
@@ -70,7 +71,7 @@ class MessageControllerUnitTest(
                     .content(objectMapper.writeValueAsString(createRequest)),
             ).andExpect(mockStatus().isCreated)
             .andExpect(mockHeader().string("Location", "/api/v1/messages/test-uuid"))
-            .andExpect(mockContent().json(DUMMY_JSON, true))
+            .andExpect(mockContent().json(DUMMY_JSON, JsonCompareMode.STRICT))
     }
 
     @Test
@@ -80,7 +81,7 @@ class MessageControllerUnitTest(
         mockMvc
             .perform(mvcGet("/api/v1/messages/test-uuid").accept(MediaType.APPLICATION_JSON))
             .andExpect(mockStatus().isOk)
-            .andExpect(mockContent().json(DUMMY_JSON, true))
+            .andExpect(mockContent().json(DUMMY_JSON, JsonCompareMode.STRICT))
     }
 
     @Test
