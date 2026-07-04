@@ -25,7 +25,7 @@ Spring Boot · Kotlin · H2 (file-based) · Google Gemini API · ktlint
 
 | Goal | Command |
 |------|---------|
-| Run all tests (unit + integration) | `./mvnw test` |
+| Run all tests (unit + 'integration') | `./mvnw test` |
 | Run only unit tests | `.\mvnw.cmd test -Dtest="com.nikita.userservice.controller.MessageControllerUnitTest,com.nikita.userservice.service.MessageServiceUnitTest"` |
 | Generate JaCoCo coverage report | `./mvnw test jacoco:report` — then open `target/site/jacoco/index.html` in a browser |
 
@@ -33,10 +33,20 @@ Spring Boot · Kotlin · H2 (file-based) · Google Gemini API · ktlint
 
 ### Create a message
 
+#### Bash Command
 ```bash
 curl -X POST http://localhost:8080/api/v1/messages \
   -H "Content-Type: application/json" \
   -d '{"text": "Hello world", "sentiment": "UNKNOWN"}'
+```
+
+#### Powershell Example Command
+```bash
+$body = @{
+    text      = "Hello super duper happy world!"
+} | ConvertTo-Json
+
+Invoke-RestMethod -Method Post -Uri "http://localhost:8080/api/v1/messages" -ContentType "application/json" -Body $body
 ```
 
 The `sentiment` field is optional — if omitted, the Gemini API will analyze it automatically.
