@@ -2,6 +2,8 @@
 
 A Spring Boot service for storing messages with optional sentiment analysis powered by Google Gemini.
 
+It's not actually useful, just a technical demo.
+
 ## Tech Stack
 
 Spring Boot · Kotlin · H2 (file-based) · Google Gemini API · ktlint
@@ -34,7 +36,7 @@ Spring Boot · Kotlin · H2 (file-based) · Google Gemini API · ktlint
 ```bash
 curl -X POST http://localhost:8080/api/v1/messages \
   -H "Content-Type: application/json" \
-  -d '{"text": "Hello world", "sentiment": "NEUTRAL"}'
+  -d '{"text": "Hello world", "sentiment": "UNKNOWN"}'
 ```
 
 The `sentiment` field is optional — if omitted, the Gemini API will analyze it automatically.
